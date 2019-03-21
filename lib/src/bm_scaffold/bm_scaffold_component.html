@@ -11,15 +11,67 @@
       *ngFor="let bookmark of bookmarks; let $i = index"
     >
       <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{ bookmark['title'] }}</h5>
-          <p class="card-text">{{ bookmark['description'] }}</p>
-          <a [href]="bookmark['url']" class="btn btn-primary">Go to website</a>
-          <button class="btn btn-danger" (click)="removeBookmark($i)">
-            Delete
+        <div class="card-body" *ngIf="!bookmark.edit">
+          <h5 class="card-title">{{ bookmark.title }}</h5>
+          <p class="card-text">{{ bookmark.description }}</p>
+          <a [href]="bookmark.url" class="btn btn-primary">Go to website</a>
+          <button class="btn btn-warning" (click)="editBookmark($i)">
+            Edit
           </button>
         </div>
+        <div class="card-body" *ngIf="bookmark.edit">
+          <form novalidate>
+            <div class="form-group">
+              <label for="bm-form-title">Title</label>
+              <input
+                type="text"
+                name="title"
+                id="bm-form-title"
+                class="form-control"
+                [(ngModel)]="editedBookmark.title"
+              />
+            </div>
+            <div class="form-group">
+              <label for="bm-form-description">Description</label>
+              <textarea
+                name="description"
+                id="bm-form-description"
+                class="form-control"
+                [(ngModel)]="editedBookmark.description"
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="bm-form-url">Url</label>
+              <input
+                type="url"
+                name="url"
+                id="bm-form-url"
+                class="form-control"
+                [(ngModel)]="editedBookmark.url"
+              />
+            </div>
+            <button class="btn btn-success" (click)="updateBookmark($i)">
+              Update
+            </button>
+            <button class="btn btn-warning" (click)="bookmark.edit = false">
+              Cancel
+            </button>
+            <button class="btn btn-danger" (click)="removeBookmark($i)">
+              Delete
+            </button>
+          </form>
+        </div>
       </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <button
+        (click)="addBookmark()"
+        class="btn btn-block btn-lg btn-outline-success"
+      >
+        + Add a bookmark
+      </button>
     </div>
   </div>
 </div>
