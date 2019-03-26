@@ -1,0 +1,72 @@
+<form (ngSubmit)="updateBookmark(bmForm)" #bmForm="ngForm" novalidate>
+  <div class="form-group">
+    <label for="bm-form-title">Title</label>
+    <input
+      type="text"
+      name="title"
+      id="bm-form-title"
+      class="form-control"
+      required
+      [(ngModel)]="editedBookmark.title"
+      ngControl="title"
+      #title="ngForm"
+      [class.is-valid]="title.dirty && title.valid"
+      [class.is-invalid]="
+        (title.dirty && !title.valid) || (submitted && !title.valid)
+      "
+    />
+    <div
+      [hidden]="title.valid || (title.pristine && !submitted)"
+      class="invalid-feedback"
+    >
+      Please enter a title
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="bm-form-description">Description</label>
+    <textarea
+      name="description"
+      id="bm-form-description"
+      class="form-control"
+      [(ngModel)]="editedBookmark.description"
+      #description="ngForm"
+      [class.is-valid]="description.dirty && description.valid"
+    ></textarea>
+  </div>
+  <div class="form-group">
+    <label for="bm-form-url">Url</label>
+    <input
+      type="url"
+      name="url"
+      id="bm-form-url"
+      class="form-control"
+      [(ngModel)]="editedBookmark.url"
+      required
+      #url="ngForm"
+      ngControl="url"
+      [class.is-valid]="url.dirty && url.valid"
+      [class.is-invalid]="
+        (url.dirty && !url.valid) || (submitted && !url.valid)
+      "
+    />
+    <div
+      [hidden]="url.valid || (url.pristine && !submitted)"
+      class="invalid-feedback"
+    >
+      Please enter a url
+    </div>
+  </div>
+  <button class="btn btn-success">
+    Update
+  </button>
+  <button
+    class="btn btn-warning"
+    *ngIf="!bookmark.isFresh"
+    (click)="bookmark.edit = false"
+  >
+    Cancel
+  </button>
+  <button class="btn btn-danger" (click)="removeBookmark()">
+    Delete
+  </button>
+</form>
