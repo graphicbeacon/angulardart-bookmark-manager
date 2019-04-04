@@ -19,6 +19,10 @@ class BookmarkFormComponent implements OnInit {
   @Output('onDelete')
   Stream get formDelete => _formDeleteCtrl.stream;
 
+  final _formUpdateCtrl = StreamController();
+  @Output('onUpdate')
+  Stream get formUpdate => _formUpdateCtrl.stream;
+
   bool submitted = false;
 
   @override
@@ -32,8 +36,8 @@ class BookmarkFormComponent implements OnInit {
     if (form.valid) {
       bookmark
         ..update(editedBookmark)
-        ..edit = false
-        ..isFresh = false;
+        ..edit = false;
+      _formUpdateCtrl.add(null);
     }
   }
 

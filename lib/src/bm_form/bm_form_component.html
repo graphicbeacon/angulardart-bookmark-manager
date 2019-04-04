@@ -61,12 +61,13 @@
   </button>
   <button
     class="btn btn-warning"
-    *ngIf="!bookmark.isFresh"
+    *ngIf="bookmark.id != null"
+    type="button"
     (click)="bookmark.edit = false"
   >
     Cancel
   </button>
-  <button class="btn btn-danger" (click)="removeBookmark()">
+  <button class="btn btn-danger" type="button" (click)="removeBookmark()">
     Delete
   </button>
 </form>

@@ -2,42 +2,32 @@ import 'package:angular/angular.dart';
 
 import '../model/bookmark.dart';
 import '../bm_form/bm_form_component.dart';
+import '../services/bookmark_service.dart';
 
 @Component(
-  selector: 'bm-scaffold',
-  templateUrl: 'bm_scaffold_component.html',
-  directives: [
-    coreDirectives,
-    BookmarkFormComponent,
-  ],
-)
-class BookmarkScaffoldComponent {
-  final List bookmarks = [
-    Bookmark(
-      title: 'Creative Bracket',
-      description:
-          'Go-to Dart blog containing Dart resources for beginners and beyond',
-      url: 'https://creativebracket.com',
-      edit: false,
-      isFresh: false,
-    ),
-    Bookmark(
-      title: 'Dartlang Home',
-      description: 'Documentation website for the Dart language and tools',
-      url: 'https://dartlang.org',
-      edit: false,
-      isFresh: false,
-    ),
-    Bookmark(
-      title: 'Flutter',
-      description: 'Build native mobile apps with the Flutter SDK',
-      url: 'https://flutter.io',
-      edit: false,
-      isFresh: false,
-    )
-  ];
+    selector: 'bm-scaffold',
+    templateUrl: 'bm_scaffold_component.html',
+    directives: [
+      coreDirectives,
+      BookmarkFormComponent,
+    ],
+    providers: [
+      ClassProvider(BookmarkService)
+    ])
+class BookmarkScaffoldComponent implements OnInit {
+  BookmarkScaffoldComponent(this._bmService);
+
+  final BookmarkService _bmService;
+  List bookmarks = [];
+  bool isLoading = true;
 
   Bookmark editedBookmark;
+
+  @override
+  Future<Null> ngOnInit() async {
+    bookmarks = await _bmService.getBookmarks();
+    isLoading = false;
+  }
 
   addBookmark() {
     bookmarks.add(Bookmark());
@@ -47,7 +37,19 @@ class BookmarkScaffoldComponent {
     bookmarks[index].edit = true;
   }
 
-  removeBookmark(int index) {
+  removeBookmark(int index) async {
+    await _bmService.removeBookmark(bookmarks[index]);
     bookmarks.removeAt(index);
+  }
+
+  updateBookmark(int index) async {
+    var bm = bookmarks[index];
+
+    if (bm.id == null) {
+      var resId = await _bmService.addBookmark(bm);
+      bm.id = resId;
+    } else {
+      await _bmService.updateBookmark(bm);
+    }
   }
 }

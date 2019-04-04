@@ -4,7 +4,14 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12" *ngIf="bookmarks.isEmpty">
-      <div class="alert text-center">No bookmarks added.</div>
+      <div class="alert text-center">
+        <template [ngIf]="!isLoading">
+          No bookmarks added.
+        </template>
+        <template [ngIf]="isLoading">
+          Loading bookmarks from database...
+        </template>
+      </div>
     </div>
     <div
       class="col-md-4 mb-3"
@@ -23,6 +30,7 @@
           <bm-form
             [bookmark]="bookmark"
             (onDelete)="removeBookmark($i)"
+            (onUpdate)="updateBookmark($i)"
           ></bm-form>
         </div>
       </div>
